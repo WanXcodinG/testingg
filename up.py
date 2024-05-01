@@ -1,7 +1,6 @@
 import subprocess
 import time
 import random
-import re
 
 def execute_command(command):
     try:
@@ -54,34 +53,33 @@ def main():
     # Membuat instance subprocess untuk menangani interaksi
     p = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    # Menunggu prompt untuk nama paket
+    # Menangani output dari npm init
     while True:
         output = p.stdout.readline().strip()
         print(output)
-        if output.startswith("package name: (@WanXcoinG/my-app)"):
+        if "package name:" in output:
+            random_package_name = "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
+            p.stdin.write(random_package_name + "\n")
+            p.stdin.flush()
+        elif "Press ^C" in output:
+            # Memberikan respons sesuai dengan permintaan untuk menekan ^C untuk keluar
+            p.stdin.write("\n")
+            p.stdin.flush()
+        elif output.startswith("Is this OK?"):
+            # Menanggapi permintaan konfirmasi dari npm init
+            p.stdin.write("yes\n")
+            p.stdin.flush()
             break
-
-    # Kirim package name acak
-    random_package_name = "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
-    p.stdin.write(random_package_name + "\n")
-    p.stdin.flush()
-
-    # Menunggu prompt konfirmasi
-    while True:
-        output = p.stdout.readline().strip()
-        print(output)
-        if re.match(r"^Is this OK\? \(yes\/no\):$", output):
-            break
-
-    # Menanggapi permintaan konfirmasi dari npm init
-    p.stdin.write("yes\n")
-    p.stdin.flush()
 
     # Tunggu proses selesai
     p.wait()
 
     # Delay 5 detik
     time.sleep(5)
+
+    # Klik enter tujuh kali (saya asumsikan ini untuk menyetujui default)
+    for _ in range(7):
+        execute_command("echo. | npm publish")
 
     # Publish dengan akses publik
     execute_command("npm publish --access public")
