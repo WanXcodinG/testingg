@@ -8,6 +8,12 @@ def execute_command(command):
     except subprocess.CalledProcessError as e:
         print(f"Error executing command '{command}': {e}")
 
+def interact_with_process(process, inputs):
+    for input_line in inputs:
+        process.stdin.write(input_line.encode('utf-8') + b'\n')
+        process.stdin.flush()
+        time.sleep(1)
+
 def main():
     # Buka CMD
     execute_command("start cmd")
@@ -47,40 +53,28 @@ def main():
     time.sleep(10)
 
     # Inisialisasi npm dengan scope
-    execute_command("npm init --scope=@WanXcoinG")
-    time.sleep(2)
+    npm_init_process = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    # Membuat instance subprocess untuk menangani interaksi
-    p = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-    # Menangani output dari npm init
-    while True:
-        output = p.stdout.readline().strip()
-        print(output)
-        if "package name: (@WanXcoinG/my-app)" in output:
-            random_package_name = "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
-            p.stdin.write(random_package_name + "\n")
-            p.stdin.flush()
-        elif "Press ^C" in output:
-            # Memberikan respons sesuai dengan permintaan untuk menekan ^C untuk keluar
-            p.stdin.write("\n")
-            p.stdin.flush()
-        elif output.startswith("Is this OK?"):
-            # Menanggapi permintaan konfirmasi dari npm init
-            p.stdin.write("yes\n")
-            p.stdin.flush()
-            break
+    # Menanggapi prompt dari npm init
+    inputs = [
+        "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5)) + "\n",
+        "\n",  # version
+        "\n",  # description
+        "\n",  # entry point
+        "\n",  # git repository
+        "\n",  # keywords
+        "\n",  # author
+        "\n",  # license
+        "yes\n"  # Is this OK?
+    ]
+    interact_with_process(npm_init_process, inputs)
 
     # Tunggu proses selesai
-    p.wait()
+    npm_init_process.wait()
 
     # Delay 5 detik
     time.sleep(5)
-
-    # Klik enter tujuh kali (saya asumsikan ini untuk menyetujui default)
-    for _ in range(7):
-        execute_command("echo. | npm publish")
-
+    
     # Publish dengan akses publik
     execute_command("npm publish --access public")
 
