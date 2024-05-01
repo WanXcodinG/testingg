@@ -39,13 +39,7 @@ def main():
     # Push ke branch utama
     execute_command("git push -u origin main")
     time.sleep(10)
-
-    # Tambahkan user npm
-    execute_command("npm adduser")
-
-    # Tunggu 10 detik
-    time.sleep(30)
-
+    
     # Publish npm
     execute_command("npm publish")
 
@@ -74,7 +68,7 @@ def main():
 
     # Delay 5 detik
     time.sleep(5)
-    
+
     # Publish dengan akses publik
     execute_command("npm publish --access public")
 
