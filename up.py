@@ -1,18 +1,16 @@
 import subprocess
 import time
 import random
+import string
 
-def execute_command(command):
+def execute_command(command, input_data=None):
     try:
-        subprocess.run(command, shell=True, check=True)
+        subprocess.run(command, shell=True, check=True, input=input_data, text=True, timeout=30)
     except subprocess.CalledProcessError as e:
         print(f"Error executing command '{command}': {e}")
 
-def interact_with_process(process, inputs):
-    for input_line in inputs:
-        process.stdin.write(input_line.encode('utf-8') + b'\n')
-        process.stdin.flush()
-        time.sleep(1)
+def generate_random_username():
+    return ''.join(random.choices(string.ascii_lowercase, k=10))
 
 def main():
     # Buka CMD
@@ -39,7 +37,13 @@ def main():
     # Push ke branch utama
     execute_command("git push -u origin main")
     time.sleep(10)
-    
+
+    # Tambahkan user npm
+    execute_command("npm adduser")
+
+    # Tunggu 10 detik
+    time.sleep(30)
+
     # Publish npm
     execute_command("npm publish")
 
@@ -47,24 +51,7 @@ def main():
     time.sleep(10)
 
     # Inisialisasi npm dengan scope
-    npm_init_process = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-    # Menanggapi prompt dari npm init
-    inputs = [
-        "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5)) + "\n",
-        "\n",  # version
-        "\n",  # description
-        "\n",  # entry point
-        "\n",  # git repository
-        "\n",  # keywords
-        "\n",  # author
-        "\n",  # license
-        "yes\n"  # Is this OK?
-    ]
-    interact_with_process(npm_init_process, inputs)
-
-    # Tunggu proses selesai
-    npm_init_process.wait()
+    execute_command("npm init --scope=@WanXcoinG", input_data=generate_random_username() + "\n" + ('\n' * 7))
 
     # Delay 5 detik
     time.sleep(5)
