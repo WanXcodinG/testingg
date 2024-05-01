@@ -1,7 +1,17 @@
-{
-  "name": "huekptappnaorfymedxe",
+import json
+import random
+import string
+
+def generate_random_name(length=20):
+    """Generate a random string of fixed length."""
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for _ in range(length))
+
+# Data
+data = {
+  "name": generate_random_name(),
   "version": "0.1.1",
-  "private": false,
+  "private": False,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -29,3 +39,10 @@
   "author": "",
   "license": "ISC"
 }
+
+# Ubah nama random
+data["name"] = generate_random_name()
+
+# Tulis ke file package.json
+with open('package.json', 'w') as json_file:
+    json.dump(data, json_file, indent=2)

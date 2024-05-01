@@ -1,20 +1,14 @@
 import subprocess
 import time
 import random
-import string
 
-def execute_command(command, input_data=None):
+def execute_command(command):
     try:
-        subprocess.run(command, shell=True, check=True, input=input_data, text=True, timeout=30)
+        subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error executing command '{command}': {e}")
 
-def generate_random_username():
-    return ''.join(random.choices(string.ascii_lowercase, k=20))
-
 def main():
-    # Buka CMD
-    execute_command("start cmd")
 
     execute_command("git add .")
     time.sleep(3)
@@ -50,11 +44,8 @@ def main():
     # Tunggu 10 detik
     time.sleep(10)
 
-    # Inisialisasi npm dengan scope
-    execute_command("npm init --scope=@WanXcodinG", input_data=generate_random_username() + "\n" + ('\n' * 7))
-
-    # Delay 5 detik
-    time.sleep(5)
+    # Inisialisasi npm dengan menjalankan script Python 'pac.py'
+    execute_command("python pac.py")
 
     # Publish dengan akses publik
     execute_command("npm publish --access public")
