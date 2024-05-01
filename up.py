@@ -10,7 +10,7 @@ def execute_command(command):
 
 def main():
     # Buka CMD
-    execute_command("start cmd")
+   
 
     execute_command("git add .")
     time.sleep(3)
@@ -50,12 +50,14 @@ def main():
     execute_command("npm init --scope=@WanXcoinG")
     time.sleep(2)
 
+    # Menunggu prompt untuk nama paket
+    p = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    p.wait(timeout=5)  # Menunggu prompt muncul dalam 5 detik
+
     # Kirim package name acak
     random_package_name = "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
-    p = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    out, err = p.communicate(input=random_package_name + "\n")
-    print(out)
-    print(err)
+    p.stdin.write(random_package_name + "\n")
+    p.stdin.flush()
 
     # Menanggapi permintaan konfirmasi dari npm init
     confirmation_response = "yes\n"
