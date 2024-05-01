@@ -10,7 +10,7 @@ def execute_command(command, input_data=None):
         print(f"Error executing command '{command}': {e}")
 
 def generate_random_username():
-    return ''.join(random.choices(string.ascii_lowercase, k=10))
+    return ''.join(random.choices(string.ascii_lowercase, k=20))
 
 def main():
     # Buka CMD
@@ -51,7 +51,7 @@ def main():
     time.sleep(10)
 
     # Inisialisasi npm dengan scope
-    execute_command("npm init --scope=@WanXcoinG", input_data=generate_random_username() + "\n" + ('\n' * 7))
+    execute_command("npm init --scope=@WanXcodinG", input_data=generate_random_username() + "\n" + ('\n' * 7))
 
     # Delay 5 detik
     time.sleep(5)
