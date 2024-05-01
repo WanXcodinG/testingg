@@ -46,6 +46,7 @@ def main():
 
     # Inisialisasi npm dengan menjalankan script Python 'pac.py'
     execute_command("python pac.py")
+    time.sleep(5)
 
     # Publish dengan akses publik
     execute_command("npm publish --access public")
