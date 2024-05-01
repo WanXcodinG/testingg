@@ -1,6 +1,7 @@
 import subprocess
 import time
 import random
+import re
 
 def execute_command(command):
     try:
@@ -10,7 +11,7 @@ def execute_command(command):
 
 def main():
     # Buka CMD
-   
+    execute_command("start cmd")
 
     execute_command("git add .")
     time.sleep(3)
@@ -50,19 +51,34 @@ def main():
     execute_command("npm init --scope=@WanXcoinG")
     time.sleep(2)
 
-    # Menunggu prompt untuk nama paket
+    # Membuat instance subprocess untuk menangani interaksi
     p = subprocess.Popen(['npm', 'init', '--scope=@WanXcoinG'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    p.wait(timeout=5)  # Menunggu prompt muncul dalam 5 detik
+
+    # Menunggu prompt untuk nama paket
+    while True:
+        output = p.stdout.readline().strip()
+        print(output)
+        if output.startswith("package name: (@WanXcoinG/my-app)"):
+            break
 
     # Kirim package name acak
     random_package_name = "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
     p.stdin.write(random_package_name + "\n")
     p.stdin.flush()
 
+    # Menunggu prompt konfirmasi
+    while True:
+        output = p.stdout.readline().strip()
+        print(output)
+        if re.match(r"^Is this OK\? \(yes\/no\):$", output):
+            break
+
     # Menanggapi permintaan konfirmasi dari npm init
-    confirmation_response = "yes\n"
-    p.stdin.write(confirmation_response)
+    p.stdin.write("yes\n")
     p.stdin.flush()
+
+    # Tunggu proses selesai
+    p.wait()
 
     # Delay 5 detik
     time.sleep(5)
