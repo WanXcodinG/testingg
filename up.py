@@ -57,7 +57,7 @@ def main():
     while True:
         output = p.stdout.readline().strip()
         print(output)
-        if "package name:" in output:
+        if "package name: (@WanXcoinG/my-app)" in output:
             random_package_name = "fake_package_" + ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
             p.stdin.write(random_package_name + "\n")
             p.stdin.flush()
