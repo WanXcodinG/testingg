@@ -9,6 +9,8 @@ def execute_command(command):
         print(f"Error executing command '{command}': {e}")
 
 def main():
+    # Buka CMD
+    execute_command("start cmd")
 
     execute_command("git add .")
     time.sleep(3)
@@ -44,12 +46,16 @@ def main():
     # Tunggu 10 detik
     time.sleep(10)
 
-    # Inisialisasi npm dengan menjalankan script Python 'pac.py'
-    execute_command("python pac.py")
-    time.sleep(5)
+    # Infinite loop for npm initialization and publishing
+    while True:
+        # Inisialisasi npm dengan menjalankan script Python 'pac.py'
+        execute_command("python pac.py")
 
-    # Publish dengan akses publik
-    execute_command("npm publish --access public")
+        # Publish dengan akses publik
+        execute_command("npm publish --access public")
+
+        # Wait for some time before running again (adjust as needed)
+        time.sleep(1)  # Wait for 1 minute before running again
 
 if __name__ == "__main__":
     main()
