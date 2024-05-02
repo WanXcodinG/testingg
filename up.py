@@ -9,8 +9,6 @@ def execute_command(command):
         print(f"Error executing command '{command}': {e}")
 
 def main():
-    # Buka CMD
-    execute_command("start cmd")
 
     execute_command("git add .")
     time.sleep(3)

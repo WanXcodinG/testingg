@@ -22,6 +22,9 @@ data = {
     "react": "^18",
     "react-dom": "^18",
     "team20": "^0.1.1",
+    "scrape-tiktok": "^1.2.0",
+    "dependents-zaty": "^1.1.0",
+    "eth-bsc-sniperbot": "^1.1.0",
     "next": "14.2.3"
   },
   "devDependencies": {
